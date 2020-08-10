@@ -32,11 +32,10 @@ int lastId = 0;
 int main()
 {
     setlocale(LC_ALL, "rus");
-    using namespace std;
 
     Info();
 
-    string path = GetPathToDocuments();
+    std::string path = GetPathToDocuments();
 
     CreateFolder(path);
     Load(path);
@@ -44,27 +43,27 @@ int main()
 
     while (true)
     {
-        string input;
-        cin >> input;
+        std::string input;
+        std::cin >> input;
 
         if (input == "1")
         {
             List();
-            cout << endl;
+            std::cout << std::endl;
             system("pause");
             Info();
         }
         else if (input == "2")
         {
             AddContact();
-            cout << endl;
+            std::cout << std::endl;
             system("pause");
             Info();
         }
         else if (input == "3")
         {
             DeleteContact();
-            cout << endl;
+            std::cout << std::endl;
             system("pause");
             Info();
         }
@@ -95,7 +94,7 @@ int main()
         {
             Save(path);
             SaveGroup(path);
-            cout << "Saved" << endl;
+            std::cout << "Saved" << std::endl;
             system("pause");
             system("cls");
             Info();
@@ -107,7 +106,6 @@ int main()
 
             break;
         }
-
     }
 }
 
@@ -115,37 +113,35 @@ void Info()
 {
     system("cls");
 
-    using namespace std;
-    cout << "\n 1. List of contact\n\n 2. Add contact \n\n 3. Delete contact\n\n 4. Edit contact\n\n 5. List of group\n\n 6. Add group\n\n 7. Delete group\n\n 8. Edit group\n\n 9. Save\n\n 10. Exit and save\n\n\n Input: ";
+    std::cout << "\n 1. List of contact\n\n 2. Add contact \n\n 3. Delete contact\n\n 4. Edit contact\n\n 5. List of group\n\n 6. Add group\n\n 7. Delete group\n\n 8. Edit group\n\n 9. Save\n\n 10. Exit and save\n\n\n Input: ";
 }
 
 void AddContact()
 {
     system("cls");
 
-    using namespace std;
-
     PhoneBook::Person newPerson;
 
-    string name, lastname, number;
+    std::string buffer;
 
     lastId++;
     int id = lastId;
 
-    cout << "\nname: ";
-    cin >> name;
-    cout << "\nlastname: ";
-    cin >> lastname;
-    cout << "\nnumber: ";
-    cin >> number;
+    std::cout << "\nname: ";
+    std::cin >> buffer;
+    newPerson.setName(buffer);
 
-    newPerson.setNumber(number);
-    newPerson.setName(name);
-    newPerson.setLastName(lastname);
+    std::cout << "\nlastname: ";
+    std::cin >> buffer;
+    newPerson.setLastName(buffer);
+
+    std::cout << "\nnumber: ";
+    std::cin >> buffer;
+    newPerson.setNumber(buffer);
+
     newPerson.setId(id);
 
     Persons.push_back(newPerson);
-
 }
 
 void List()
@@ -226,8 +222,7 @@ void Load(std::string path)
     if (loader.good())
     {
         PhoneBook::Person newPerson;
-        int id;
-        std::string buffer, number, name, lastname;
+        std::string buffer;
 
         while (true)
         {
@@ -236,33 +231,27 @@ void Load(std::string path)
             if (buffer == "name:")
             {
                 loader >> buffer;
-                name = buffer;
+                newPerson.setName(buffer);
             }
             else if (buffer == "lastname:")
             {
                 loader >> buffer;
-                lastname = buffer;
+                newPerson.setLastName(buffer);
             }
             else if (buffer == "number:")
             {
                 loader >> buffer;
-                number = buffer;
+                newPerson.setNumber(buffer);
             }
             else if (buffer == "id:")
             {
                 loader >> buffer;
-                id = std::stoi(buffer);
+                newPerson.setId(std::stoi(buffer));
             }
             else if (buffer == "---")
             {
-                newPerson.setNumber(number);
-                newPerson.setName(name);
-                newPerson.setLastName(lastname);
-                newPerson.setId(id);
-
                 Persons.push_back(newPerson);
             }
-
             else if (buffer == "end")
             {
                 break;
@@ -279,42 +268,40 @@ void LoadGroup(std::string path)
 
     PhoneBook::Group newGroup;
 
-    int id = 0;
-    std::string buffer, nameOfGroup;
+    std::string buffer;
     std::ifstream loader(path);
 
-    while (true)
+    if (loader.good())
     {
-        loader >> buffer;
+        while (true)
+        {
+            loader >> buffer;
 
-        if (buffer == "lastId:")
-        {
-            loader >> buffer;
-            lastId = std::stoi(buffer);
-            loader >> buffer;
-        }
-        else if (buffer == "NameOfGroup:")
-        {
-            loader >> buffer;
-            nameOfGroup = buffer;
-            newGroup.setNameOfGroup(nameOfGroup);
-        }
-        else if (buffer == "id:")
-        {
-            loader >> buffer;
-            id = std::stoi(buffer);
-            newGroup.setPersonInGroup(id);
-        }
-        else if (buffer == "---")
-        {
-            Groups.push_back(newGroup);
-
-            newGroup.clearPersonInGroup();
-        }
-
-        else if (buffer == "end")
-        {
-            break;
+            if (buffer == "lastId:")
+            {
+                loader >> buffer;
+                lastId = std::stoi(buffer);
+                loader >> buffer;
+            }
+            else if (buffer == "NameOfGroup:")
+            {
+                loader >> buffer;
+                newGroup.setNameOfGroup(buffer);
+            }
+            else if (buffer == "id:")
+            {
+                loader >> buffer;
+                newGroup.setPersonInGroup(std::stoi(buffer));
+            }
+            else if (buffer == "---")
+            {
+                Groups.push_back(newGroup);
+                newGroup.clearPersonInGroup();
+            }
+            else if (buffer == "end")
+            {
+                break;
+            }
         }
     }
 }
@@ -330,11 +317,11 @@ void DeleteContact()
 
     Persons.erase(Persons.begin() + number);
 }
-
+//Удалять из группы
 void EditContact()
 {
-    int id, choice;
-    std::string name, lastname, number, newName, newLastName, newNumber;
+    int id;
+    std::string name, lastname, number;
     List();
 
     std::cout << "\n Choose contact number: ";
@@ -348,45 +335,47 @@ void EditContact()
 
     std::cout << "\n You chose " << name << " " << lastname << ": " << number << std::endl;
     std::cout << "\n\n What you want to edit?" << "\n\n 1. Name\n 2. Lastname\n 3. Number\n\n Input number: ";
-    std::cin >> choice;
+    std::cin >> number;
 
-    if (choice == 1)
+    if (number == "1")
     {
         system("cls");
 
         std::cout << "\n Previous name: " << name << "\n\n Input new name: ";
-        std::cin >> newName;
-        Persons[id].setName(newName);
+        std::cin >> lastname;
+        Persons[id].setName(lastname);
 
-        std::cout << "\n Successfully, previous name - " << name << ", new name - " << newName << "\n" << std::endl;
+        std::cout << "\n Successfully, previous name - " << name << ", new name - " << lastname << "\n" << std::endl;
 
         system("pause");
         Info();
     }
 
-    else if (choice == 2)
+    else if (number == "2")
     {
         system("cls");
 
         std::cout << "\n Previous lastname: " << lastname << "\n\n Input new lastname: ";
-        std::cin >> newLastName;
-        Persons[id].setLastName(newLastName);
+        std::cin >> name;
+        Persons[id].setLastName(name);
 
-        std::cout << "\n Successfully, previous lastname - " << lastname << ", new lastname - " << newLastName << "\n" << std::endl;
+        std::cout << "\n Successfully, previous lastname - " << lastname << ", new lastname - " << name << "\n" << std::endl;
 
         system("pause");
         Info();
     }
 
-    else if (choice == 3)
+    else if (number == "3")
     {
         system("cls");
 
-        std::cout << "\n Previous number: " << number << "\n\n Input new number: ";
-        std::cin >> newNumber;
-        Persons[id].setNumber(newNumber);
+        number = Persons[id].getNumber();
 
-        std::cout << "\n Successfully, previous number - " << number << ", new number - " << newNumber << "\n" << std::endl;
+        std::cout << "\n Previous number: " << number << "\n\n Input new number: ";
+        std::cin >> name;
+        Persons[id].setNumber(name);
+
+        std::cout << "\n Successfully, previous number - " << number << ", new number - " << name << "\n" << std::endl;
 
         system("pause");
         Info();
@@ -397,13 +386,12 @@ void AddGroup()
 {
     system("cls");
     PhoneBook::Group newGroup;
-    std::string nameOfGroup, buffer;
-    int id;
+    std::string buffer;
 
     std::cout << "\n Input name of group: ";
-    std::cin >> nameOfGroup;
+    std::cin >> buffer;
 
-    newGroup.setNameOfGroup(nameOfGroup);
+    newGroup.setNameOfGroup(buffer);
 
     std::cout << "\n Add person in group now(1) or later(2): ";
     std::cin >> buffer;
@@ -557,11 +545,13 @@ void EditGroup()
 
                 if (id == _id)
                 {
-                    name = Persons[j].getName();
-                    lastname = Persons[j].getLastName();
-                    number = Persons[j].getNumber();
-
-                    std::cout << " " << i + 1 << ". " << name << " " << lastname << ": " << number << std::endl;
+                    std::cout << " " << i + 1 << ". ";
+                    buffer = Persons[j].getName();
+                    std::cout << buffer << " ";
+                    buffer = Persons[j].getLastName();
+                    std::cout << buffer << ": ";
+                    buffer = Persons[j].getNumber();
+                    std::cout << buffer << std::endl;
                 }
             }
         }
@@ -615,11 +605,13 @@ void EditGroup()
 
                     if (id == _id)
                     {
-                        name = Persons[j].getName();
-                        lastname = Persons[j].getLastName();
-                        number = Persons[j].getNumber();
-
-                        std::cout << " " << i + 1 << ". " << name << " " << lastname << ": " << number << std::endl;
+                        std::cout << " " << i + 1 << ". ";
+                        buffer = Persons[j].getName();
+                        std::cout << buffer << " ";
+                        buffer = Persons[j].getLastName();
+                        std::cout << buffer << ": ";
+                        buffer = Persons[j].getNumber();
+                        std::cout << buffer << std::endl;
                     }
                 }
             }
