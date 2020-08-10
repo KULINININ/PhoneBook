@@ -1,6 +1,8 @@
 ﻿#include <iostream>
 #include <string>
 #include <vector>
+#include <ShlObj.h>
+#include <direct.h>
 
 class Person
 {
@@ -57,6 +59,7 @@ void Info();
 void List();
 void DeleteContact();
 void EditContact();
+std::string GetPathToDocuments();
 
 std::vector <Person> Persons;
 
@@ -68,6 +71,8 @@ int main()
 
     Info();
 
+    std::string path = GetPathToDocuments();
+
     while (true)
     {
         std::string input;
@@ -76,6 +81,9 @@ int main()
         if (input == "1")
         {
             List();
+            std::cout << std::endl;
+            system("pause");
+            Info();
         }
         else if (input == "2")
         {
@@ -87,6 +95,9 @@ int main()
         else if (input == "3")
         {
             DeleteContact();
+            std::cout << std::endl;
+            system("pause");
+            Info();
         }
         else if (input == "4")
         {
@@ -254,4 +265,13 @@ void EditContact()
         system("pause");
         Info();
     }
+}
+
+std::string GetPathToDocuments()
+{
+    wchar_t* pBuffer = new wchar_t[1000];
+    SHGetFolderPathW(NULL, CSIDL_MYDOCUMENTS, NULL, SHGFP_TYPE_CURRENT, pBuffer);
+    std::wstring wpath = pBuffer;
+    std::string path(wpath.begin(), wpath.end());
+    return path;
 }
