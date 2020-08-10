@@ -34,7 +34,7 @@ public:
 
 void AddContact();
 void Info();
-
+void List();
 
 std::vector <Person> Persons;
 
@@ -53,14 +53,14 @@ int main()
 
         if (input == "1")
         {
-            //List();
+            List();
         }
         else if (input == "2")
         {
             AddContact();
             std::cout << std::endl;
             system("pause");
-            //Info();
+            Info();
         }
         else if (input == "3")
         {
@@ -128,4 +128,32 @@ void Info()
     system("cls");
 
     std::cout << "\n 1. List of contact\n\n 2. Add contact \n\n 3. Delete contact\n\n 4. Edit contact\n\n 5. List of group\n\n 6. Add group\n\n 7. Delete group\n\n 8. Edit group\n\n 9. Save\n\n 10. Exit and save\n\n\n Input: ";
+}
+
+void List()
+{
+    system("cls");
+
+    std::string buffer;
+
+    if (Persons.size() == 0)
+    {
+        std::cout << "\n Empty\n";
+    }
+    else
+    {
+        std::cout << "\n";
+
+        for (size_t i = 0; i < Persons.size(); i++)
+        {
+            std::cout << " " << i + 1 << ". ";
+            buffer = Persons[i].getName();
+            std::cout << buffer;
+            buffer = Persons[i].getLastName();
+            std::cout << " " << buffer;
+            buffer = Persons[i].getNumber();
+            std::cout << ": " << buffer << std::endl;
+            std::cout << std::endl;
+        }
+    }
 }
