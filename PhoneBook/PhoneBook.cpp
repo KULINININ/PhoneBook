@@ -54,6 +54,49 @@ public:
     }
 };
 
+class Group
+{
+private:
+    std::vector <int> PersonsInGroup;
+    std::string nameOfGroup;
+
+public:
+    void setPersonInGroup(int _id)
+    {
+        PersonsInGroup.push_back(_id);
+    }
+
+    void deletePerson(int _id)
+    {
+        PersonsInGroup.erase(PersonsInGroup.begin() + _id);
+    }
+
+    void setNameOfGroup(std::string _nameOfGroup)
+    {
+        nameOfGroup = _nameOfGroup;
+    }
+
+    int getPersonsInGroupSize()
+    {
+        return PersonsInGroup.size();
+    }
+
+    int getPersonIngroup(int i)
+    {
+        return PersonsInGroup[i];
+    }
+
+    std::string getNameOfGroup()
+    {
+        return nameOfGroup;
+    }
+
+    void clearPersonInGroup()
+    {
+        PersonsInGroup.clear();
+    }
+};
+
 void AddContact();
 void Info();
 void List();
@@ -62,6 +105,7 @@ void EditContact();
 std::string GetPathToDocuments();
 
 std::vector <Person> Persons;
+std::vector <Group> Groups;
 
 int lastId = 0;
 
