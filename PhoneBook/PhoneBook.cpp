@@ -5,50 +5,8 @@
 #include <ShlObj.h>
 #include <direct.h>
 #include "Person.h"
+#include "Group.h"
 #pragma warning(disable : 4996)
-
-class Group
-{
-private:
-    std::vector <int> PersonsInGroup;
-    std::string nameOfGroup;
-
-public:
-    void setPersonInGroup(int _id)
-    {
-        PersonsInGroup.push_back(_id);
-    }
-
-    void deletePerson(int _id)
-    {
-        PersonsInGroup.erase(PersonsInGroup.begin() + _id);
-    }
-
-    void setNameOfGroup(std::string _nameOfGroup)
-    {
-        nameOfGroup = _nameOfGroup;
-    }
-
-    int getPersonsInGroupSize()
-    {
-        return PersonsInGroup.size();
-    }
-
-    int getPersonIngroup(int i)
-    {
-        return PersonsInGroup[i];
-    }
-
-    std::string getNameOfGroup()
-    {
-        return nameOfGroup;
-    }
-
-    void clearPersonInGroup()
-    {
-        PersonsInGroup.clear();
-    }
-};
 
 void AddContact();
 void Info();
@@ -67,7 +25,7 @@ void Load(std::string path);
 void CreateFolder(std::string path);
 
 std::vector <PhoneBook::Person> Persons;
-std::vector <Group> Groups;
+std::vector <PhoneBook::Group> Groups;
 
 int lastId = 0;
 
@@ -297,7 +255,7 @@ std::string GetPathToDocuments()
 void AddGroup()
 {
     system("cls");
-    Group newGroup;
+    PhoneBook::Group newGroup;
     std::string buffer;
 
     std::cout << "\n Input name of group: ";
@@ -645,7 +603,7 @@ void LoadGroup(std::string path)
 {
     path += "\\PhoneBook\\groups.txt";
 
-    Group newGroup;
+    PhoneBook::Group newGroup;
 
     std::string buffer;
     std::ifstream loader(path);
