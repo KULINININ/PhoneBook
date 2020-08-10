@@ -8,20 +8,20 @@
 #include "Group.h"
 #pragma warning(disable : 4996)
 
-void AddContact();
 void Info();
+void AddContact();
 void List();
+void Save(std::string path);
+void Load(std::string pat);
 void DeleteContact();
 void EditContact();
-std::string GetPathToDocuments();
 void AddGroup();
 void ListOfGroup();
+void LoadGroup(std::string path);
+void SaveGroup(std::string path);
 void DeleteGroup();
 void EditGroup();
-void Save(std::string path);
-void SaveGroup(std::string path);
-void LoadGroup(std::string path);
-void Load(std::string path);
+std::string GetPathToDocuments();
 void CreateFolder(std::string path);
 
 std::vector <PhoneBook::Person> Persons;
@@ -32,10 +32,11 @@ int lastId = 0;
 int main()
 {
     setlocale(LC_ALL, "rus");
+    using namespace std;
 
     Info();
 
-    std::string path = GetPathToDocuments();
+    string path = GetPathToDocuments();
 
     CreateFolder(path);
     Load(path);
@@ -43,27 +44,27 @@ int main()
 
     while (true)
     {
-        std::string input;
-        std::cin >> input;
+        string input;
+        cin >> input;
 
         if (input == "1")
         {
             List();
-            std::cout << std::endl;
+            cout << endl;
             system("pause");
             Info();
         }
         else if (input == "2")
         {
             AddContact();
-            std::cout << std::endl;
+            cout << endl;
             system("pause");
             Info();
         }
         else if (input == "3")
         {
             DeleteContact();
-            std::cout << std::endl;
+            cout << endl;
             system("pause");
             Info();
         }
@@ -74,14 +75,17 @@ int main()
         else if (input == "5")
         {
             ListOfGroup();
+            Info();
         }
         else if (input == "6")
         {
             AddGroup();
+            Info();
         }
         else if (input == "7")
         {
             DeleteGroup();
+            Info();
         }
         else if (input == "8")
         {
@@ -91,7 +95,7 @@ int main()
         {
             Save(path);
             SaveGroup(path);
-            std::cout << "Saved" << std::endl;
+            cout << "Saved" << endl;
             system("pause");
             system("cls");
             Info();
@@ -103,40 +107,45 @@ int main()
 
             break;
         }
+
     }
-}
-
-void AddContact()
-{
-    system("cls");
-
-    PhoneBook::Person newPerson;
-
-    std::string buffer;
-
-    lastId++;
-    int id = lastId;
-
-    std::cout << "\nname: ";
-    std::cin >> buffer;
-    newPerson.setName(buffer);
-
-    std::cout << "\nlastname: ";
-    std::cin >> buffer;
-    newPerson.setLastName(buffer);
-
-    std::cout << "\nnumber: ";
-    std::cin >> buffer;
-    newPerson.setNumber(buffer);
-
-    newPerson.setId(id);
 }
 
 void Info()
 {
     system("cls");
 
-    std::cout << "\n 1. List of contact\n\n 2. Add contact \n\n 3. Delete contact\n\n 4. Edit contact\n\n 5. List of group\n\n 6. Add group\n\n 7. Delete group\n\n 8. Edit group\n\n 9. Save\n\n 10. Exit and save\n\n\n Input: ";
+    using namespace std;
+    cout << "\n 1. List of contact\n\n 2. Add contact \n\n 3. Delete contact\n\n 4. Edit contact\n\n 5. List of group\n\n 6. Add group\n\n 7. Delete group\n\n 8. Edit group\n\n 9. Save\n\n 10. Exit and save\n\n\n Input: ";
+}
+
+void AddContact()
+{
+    system("cls");
+
+    using namespace std;
+
+    PhoneBook::Person newPerson;
+
+    string name, lastname, number;
+
+    lastId++;
+    int id = lastId;
+
+    cout << "\nname: ";
+    cin >> name;
+    cout << "\nlastname: ";
+    cin >> lastname;
+    cout << "\nnumber: ";
+    cin >> number;
+
+    newPerson.setNumber(number);
+    newPerson.setName(name);
+    newPerson.setLastName(lastname);
+    newPerson.setId(id);
+
+    Persons.push_back(newPerson);
+
 }
 
 void List()
@@ -167,6 +176,149 @@ void List()
     }
 }
 
+void Save(std::string path)
+{
+    path += "\\PhoneBook\\data.txt";
+    std::ofstream saveData(path);
+    for (size_t i = 0; i < Persons.size(); i++)
+    {
+        saveData << "name: " << Persons[i].getName() << std::endl;
+        saveData << "lastname: " << Persons[i].getLastName() << std::endl;
+        saveData << "number: " << Persons[i].getNumber() << std::endl;
+        saveData << "id: " << Persons[i].getId() << std::endl;
+        saveData << "---" << std::endl;
+    }
+
+    saveData << "end" << std::endl;
+    saveData.close();
+}
+
+void SaveGroup(std::string path)
+{
+    path += "\\PhoneBook\\groups.txt";
+
+    std::ofstream saveGroups(path);
+
+    saveGroups << "lastId: " << lastId << std::endl;
+    saveGroups << "---" << std::endl;
+
+    for (size_t i = 0; i < Groups.size(); i++)
+    {
+        int size = Groups[i].getPersonsInGroupSize();
+        std::string nameOfGroup = Groups[i].getNameOfGroup();
+        saveGroups << "NameOfGroup: " << nameOfGroup << std::endl;
+
+        for (size_t j = 0; j < size; j++)
+        {
+            saveGroups << "id: " << Groups[i].getPersonIngroup(j) << std::endl;
+        }
+        saveGroups << "---" << std::endl;
+    }
+
+    saveGroups << "end" << std::endl;
+    saveGroups.close();
+}
+
+void Load(std::string path)
+{
+    path += "\\PhoneBook\\data.txt";
+    std::ifstream loader(path);
+    if (loader.good())
+    {
+        PhoneBook::Person newPerson;
+        int id;
+        std::string buffer, number, name, lastname;
+
+        while (true)
+        {
+            loader >> buffer;
+
+            if (buffer == "name:")
+            {
+                loader >> buffer;
+                name = buffer;
+            }
+            else if (buffer == "lastname:")
+            {
+                loader >> buffer;
+                lastname = buffer;
+            }
+            else if (buffer == "number:")
+            {
+                loader >> buffer;
+                number = buffer;
+            }
+            else if (buffer == "id:")
+            {
+                loader >> buffer;
+                id = std::stoi(buffer);
+            }
+            else if (buffer == "---")
+            {
+                newPerson.setNumber(number);
+                newPerson.setName(name);
+                newPerson.setLastName(lastname);
+                newPerson.setId(id);
+
+                Persons.push_back(newPerson);
+            }
+
+            else if (buffer == "end")
+            {
+                break;
+            }
+        }
+
+        loader.close();
+    }
+}
+
+void LoadGroup(std::string path)
+{
+    path += "\\PhoneBook\\groups.txt";
+
+    PhoneBook::Group newGroup;
+
+    int id = 0;
+    std::string buffer, nameOfGroup;
+    std::ifstream loader(path);
+
+    while (true)
+    {
+        loader >> buffer;
+
+        if (buffer == "lastId:")
+        {
+            loader >> buffer;
+            lastId = std::stoi(buffer);
+            loader >> buffer;
+        }
+        else if (buffer == "NameOfGroup:")
+        {
+            loader >> buffer;
+            nameOfGroup = buffer;
+            newGroup.setNameOfGroup(nameOfGroup);
+        }
+        else if (buffer == "id:")
+        {
+            loader >> buffer;
+            id = std::stoi(buffer);
+            newGroup.setPersonInGroup(id);
+        }
+        else if (buffer == "---")
+        {
+            Groups.push_back(newGroup);
+
+            newGroup.clearPersonInGroup();
+        }
+
+        else if (buffer == "end")
+        {
+            break;
+        }
+    }
+}
+
 void DeleteContact()
 {
     List();
@@ -181,8 +333,8 @@ void DeleteContact()
 
 void EditContact()
 {
-    int id;
-    std::string name, lastname, number;
+    int id, choice;
+    std::string name, lastname, number, newName, newLastName, newNumber;
     List();
 
     std::cout << "\n Choose contact number: ";
@@ -196,72 +348,62 @@ void EditContact()
 
     std::cout << "\n You chose " << name << " " << lastname << ": " << number << std::endl;
     std::cout << "\n\n What you want to edit?" << "\n\n 1. Name\n 2. Lastname\n 3. Number\n\n Input number: ";
-    std::cin >> number;
+    std::cin >> choice;
 
-    if (number == "1")
+    if (choice == 1)
     {
         system("cls");
 
         std::cout << "\n Previous name: " << name << "\n\n Input new name: ";
-        std::cin >> lastname;
-        Persons[id].setName(lastname);
+        std::cin >> newName;
+        Persons[id].setName(newName);
 
-        std::cout << "\n Successfully, previous name - " << name << ", new name - " << lastname << "\n" << std::endl;
+        std::cout << "\n Successfully, previous name - " << name << ", new name - " << newName << "\n" << std::endl;
 
         system("pause");
         Info();
     }
 
-    else if (number == "2")
+    else if (choice == 2)
     {
         system("cls");
 
         std::cout << "\n Previous lastname: " << lastname << "\n\n Input new lastname: ";
-        std::cin >> name;
-        Persons[id].setLastName(name);
+        std::cin >> newLastName;
+        Persons[id].setLastName(newLastName);
 
-        std::cout << "\n Successfully, previous lastname - " << lastname << ", new lastname - " << name << "\n" << std::endl;
+        std::cout << "\n Successfully, previous lastname - " << lastname << ", new lastname - " << newLastName << "\n" << std::endl;
 
         system("pause");
         Info();
     }
 
-    else if (number == "3")
+    else if (choice == 3)
     {
         system("cls");
 
-        number = Persons[id].getNumber();
-
         std::cout << "\n Previous number: " << number << "\n\n Input new number: ";
-        std::cin >> name;
-        Persons[id].setNumber(name);
+        std::cin >> newNumber;
+        Persons[id].setNumber(newNumber);
 
-        std::cout << "\n Successfully, previous number - " << number << ", new number - " << name << "\n" << std::endl;
+        std::cout << "\n Successfully, previous number - " << number << ", new number - " << newNumber << "\n" << std::endl;
 
         system("pause");
         Info();
     }
-}
-
-std::string GetPathToDocuments()
-{
-    wchar_t* pBuffer = new wchar_t[1000];
-    SHGetFolderPathW(NULL, CSIDL_MYDOCUMENTS, NULL, SHGFP_TYPE_CURRENT, pBuffer);
-    std::wstring wpath = pBuffer;
-    std::string path(wpath.begin(), wpath.end());
-    return path;
 }
 
 void AddGroup()
 {
     system("cls");
     PhoneBook::Group newGroup;
-    std::string buffer;
+    std::string nameOfGroup, buffer;
+    int id;
 
     std::cout << "\n Input name of group: ";
-    std::cin >> buffer;
+    std::cin >> nameOfGroup;
 
-    newGroup.setNameOfGroup(buffer);
+    newGroup.setNameOfGroup(nameOfGroup);
 
     std::cout << "\n Add person in group now(1) or later(2): ";
     std::cin >> buffer;
@@ -415,13 +557,11 @@ void EditGroup()
 
                 if (id == _id)
                 {
-                    std::cout << " " << i + 1 << ". ";
-                    buffer = Persons[j].getName();
-                    std::cout << buffer << " ";
-                    buffer = Persons[j].getLastName();
-                    std::cout << buffer << ": ";
-                    buffer = Persons[j].getNumber();
-                    std::cout << buffer << std::endl;
+                    name = Persons[j].getName();
+                    lastname = Persons[j].getLastName();
+                    number = Persons[j].getNumber();
+
+                    std::cout << " " << i + 1 << ". " << name << " " << lastname << ": " << number << std::endl;
                 }
             }
         }
@@ -475,13 +615,11 @@ void EditGroup()
 
                     if (id == _id)
                     {
-                        std::cout << " " << i + 1 << ". ";
-                        buffer = Persons[j].getName();
-                        std::cout << buffer << " ";
-                        buffer = Persons[j].getLastName();
-                        std::cout << buffer << ": ";
-                        buffer = Persons[j].getNumber();
-                        std::cout << buffer << std::endl;
+                        name = Persons[j].getName();
+                        lastname = Persons[j].getLastName();
+                        number = Persons[j].getNumber();
+
+                        std::cout << " " << i + 1 << ". " << name << " " << lastname << ": " << number << std::endl;
                     }
                 }
             }
@@ -509,138 +647,13 @@ void EditGroup()
     Info();
 }
 
-void Save(std::string path)
+std::string GetPathToDocuments()
 {
-    path += "\\PhoneBook\\data.txt";
-    std::ofstream saveData(path);
-    for (size_t i = 0; i < Persons.size(); i++)
-    {
-        saveData << "name: " << Persons[i].getName() << std::endl;
-        saveData << "lastname: " << Persons[i].getLastName() << std::endl;
-        saveData << "number: " << Persons[i].getNumber() << std::endl;
-        saveData << "id: " << Persons[i].getId() << std::endl;
-        saveData << "---" << std::endl;
-    }
-
-    saveData << "end" << std::endl;
-    saveData.close();
-}
-
-void SaveGroup(std::string path)
-{
-    path += "\\PhoneBook\\groups.txt";
-
-    std::ofstream saveGroups(path);
-
-    saveGroups << "lastId: " << lastId << std::endl;
-    saveGroups << "---" << std::endl;
-
-    for (size_t i = 0; i < Groups.size(); i++)
-    {
-        int size = Groups[i].getPersonsInGroupSize();
-        std::string nameOfGroup = Groups[i].getNameOfGroup();
-        saveGroups << "NameOfGroup: " << nameOfGroup << std::endl;
-
-        for (size_t j = 0; j < size; j++)
-        {
-            saveGroups << "id: " << Groups[i].getPersonIngroup(j) << std::endl;
-        }
-        saveGroups << "---" << std::endl;
-    }
-
-    saveGroups << "end" << std::endl;
-    saveGroups.close();
-}
-
-void Load(std::string path)
-{
-    path += "\\PhoneBook\\data.txt";
-    std::ifstream loader(path);
-    if (loader.good())
-    {
-        PhoneBook::Person newPerson;
-        std::string buffer;
-
-        while (true)
-        {
-            loader >> buffer;
-
-            if (buffer == "name:")
-            {
-                loader >> buffer;
-                newPerson.setName(buffer);
-            }
-            else if (buffer == "lastname:")
-            {
-                loader >> buffer;
-                newPerson.setLastName(buffer);
-            }
-            else if (buffer == "number:")
-            {
-                loader >> buffer;
-                newPerson.setNumber(buffer);
-            }
-            else if (buffer == "id:")
-            {
-                loader >> buffer;
-                newPerson.setId(std::stoi(buffer));
-            }
-            else if (buffer == "---")
-            {
-                Persons.push_back(newPerson);
-            }
-            else if (buffer == "end")
-            {
-                break;
-            }
-        }
-
-        loader.close();
-    }
-}
-
-void LoadGroup(std::string path)
-{
-    path += "\\PhoneBook\\groups.txt";
-
-    PhoneBook::Group newGroup;
-
-    std::string buffer;
-    std::ifstream loader(path);
-
-    if (loader.good())
-    {
-        while (true)
-        {
-            loader >> buffer;
-
-            if (buffer == "lastId:")
-            {
-                loader >> buffer;
-                lastId = std::stoi(buffer);
-                loader >> buffer;
-            }
-            else if (buffer == "NameOfGroup:")
-            {
-                loader >> buffer;
-                newGroup.setNameOfGroup(buffer);
-            }
-            else if (buffer == "id:")
-            {
-                loader >> buffer;
-                newGroup.setPersonInGroup(std::stoi(buffer));
-            }
-            else if (buffer == "---")
-            {
-                Groups.push_back(newGroup);
-                newGroup.clearPersonInGroup();
-            }
-            else if (buffer == "end")
-            {
-                break;
-            }
-        }
-    }
+    wchar_t* pBuffer = new wchar_t[1000];
+    SHGetFolderPathW(NULL, CSIDL_MYDOCUMENTS, NULL, SHGFP_TYPE_CURRENT, pBuffer);
+    std::wstring wpath = pBuffer;
+    std::string path(wpath.begin(), wpath.end());
+    return path;
 }
 
 void CreateFolder(std::string path)
