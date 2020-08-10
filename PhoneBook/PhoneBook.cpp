@@ -103,6 +103,8 @@ void List();
 void DeleteContact();
 void EditContact();
 std::string GetPathToDocuments();
+void AddGroup();
+void ListOfGroup();
 
 std::vector <Person> Persons;
 std::vector <Group> Groups;
@@ -149,7 +151,7 @@ int main()
         }
         else if (input == "5")
         {
-            //ListOfGroup();
+            ListOfGroup();
         }
         else if (input == "6")
         {
@@ -367,5 +369,47 @@ void AddGroup()
         }
 
         Groups.push_back(newGroup);
+    }
+}
+
+void ListOfGroup()
+{
+    system("cls");
+    std::cout << std::endl;
+    int input, id, _id;
+    std::string name, lastname, number;
+
+    for (size_t i = 0; i < Groups.size(); i++)
+    {
+        std::cout << " " << i + 1 << ". " << Groups[i].getNameOfGroup() << std::endl;
+    }
+
+    std::cout << "\n View in full information about group number (0-exit): ";
+    std::cin >> input;
+    std::cout << std::endl;
+
+    if (input != 0)
+    {
+        input--;
+        int PersonsInGroupSize = Groups[input].getPersonsInGroupSize();
+
+        for (size_t i = 0; i < PersonsInGroupSize; i++)
+        {
+            id = Groups[input].getPersonIngroup(i);
+
+            for (size_t j = 0; j < Persons.size(); j++)
+            {
+                _id = Persons[j].getId();
+
+                if (id == _id)
+                {
+                    name = Persons[j].getName();
+                    lastname = Persons[j].getLastName();
+                    number = Persons[j].getNumber();
+
+                    std::cout << " " << i + 1 << ". " << name << " " << lastname << ": " << number << std::endl;
+                }
+            }
+        }
     }
 }
