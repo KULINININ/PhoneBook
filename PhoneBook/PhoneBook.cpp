@@ -106,6 +106,7 @@ std::string GetPathToDocuments();
 void AddGroup();
 void ListOfGroup();
 void DeleteGroup();
+void EditGroup();
 
 std::vector <Person> Persons;
 std::vector <Group> Groups;
@@ -164,7 +165,7 @@ int main()
         }
         else if (input == "8")
         {
-            //EditGroup();
+            EditGroup();
         }
         else if (input == "9")
         {
@@ -437,4 +438,145 @@ void DeleteGroup()
 
     std::cout << std::endl;
     system("pause");
+}
+
+void EditGroup()
+{
+    system("cls");
+
+    std::cout << std::endl;
+    std::string buffer, name, lastname, number;
+    int groupId, id, _id;
+
+    for (size_t i = 0; i < Groups.size(); i++)
+    {
+        std::cout << " " << i + 1 << ". " << Groups[i].getNameOfGroup() << std::endl;
+    }
+
+    std::cout << "\n Which group to change: ";
+    std::cin >> buffer;
+    groupId = std::stoi(buffer);
+    groupId--;
+
+    std::cout << "\n Group you selected: " << Groups[groupId].getNameOfGroup();
+
+    std::cout << "\n\n Edit name of group (1) or edit persons in group(2) ?: ";
+    std::cin >> buffer;
+
+    if (buffer == "1")
+    {
+        std::cout << "\n Input new name: ";
+        std::cin >> buffer;
+
+        Groups[groupId].setNameOfGroup(buffer);
+    }
+
+    else if (buffer == "2")
+    {
+        std::cout << "\n List of person in this group:\n" << std::endl;
+
+        int PersonsInGroupSize = Groups[groupId].getPersonsInGroupSize();
+
+        for (size_t i = 0; i < PersonsInGroupSize; i++)
+        {
+            id = Groups[groupId].getPersonIngroup(i);
+
+            for (size_t j = 0; j < Persons.size(); j++)
+            {
+                _id = Persons[j].getId();
+
+                if (id == _id)
+                {
+                    std::cout << " " << i + 1 << ". ";
+                    buffer = Persons[j].getName();
+                    std::cout << buffer << " ";
+                    buffer = Persons[j].getLastName();
+                    std::cout << buffer << ": ";
+                    buffer = Persons[j].getNumber();
+                    std::cout << buffer << std::endl;
+                }
+            }
+        }
+
+        std::cout << "\n Add(1) or delete(2) persons?: ";
+        std::cin >> buffer;
+
+        if (buffer == "1")
+        {
+            for (size_t i = 0; i < Persons.size(); i++)
+            {
+                std::cout << " " << i + 1 << ". ";
+                buffer = Persons[i].getName();
+                std::cout << buffer;
+                buffer = Persons[i].getLastName();
+                std::cout << " " << buffer;
+                buffer = Persons[i].getNumber();
+                std::cout << ": " << buffer << std::endl;
+                std::cout << std::endl;
+            }
+
+            while (true)
+            {
+                std::cout << "\nInput person number (0-exit): ";
+                std::cin >> buffer;
+
+                if (buffer != "0")
+                {
+                    Groups[groupId].setPersonInGroup(std::stoi(buffer) - 1);
+                    std::cout << "Added" << std::endl;
+                }
+                else
+                {
+                    break;
+                }
+            }
+        }
+        else if (buffer == "2")
+        {
+            std::cout << std::endl;
+
+            int PersonsInGroupSize = Groups[groupId].getPersonsInGroupSize();
+
+            for (size_t i = 0; i < PersonsInGroupSize; i++)
+            {
+                id = Groups[groupId].getPersonIngroup(i);
+
+                for (size_t j = 0; j < Persons.size(); j++)
+                {
+                    _id = Persons[j].getId();
+
+                    if (id == _id)
+                    {
+                        std::cout << " " << i + 1 << ". ";
+                        buffer = Persons[j].getName();
+                        std::cout << buffer << " ";
+                        buffer = Persons[j].getLastName();
+                        std::cout << buffer << ": ";
+                        buffer = Persons[j].getNumber();
+                        std::cout << buffer << std::endl;
+                    }
+                }
+            }
+
+            while (true)
+            {
+                std::cout << "\nInput person number (0-exit): ";
+                std::cin >> buffer;
+
+                if (buffer != "0")
+                {
+                    Groups[groupId].deletePerson(std::stoi(buffer) - 1);
+                    std::cout << "Deleted" << std::endl;
+                }
+                else
+                {
+                    break;
+                }
+            }
+        }
+    }
+
+    std::cout << std::endl;
+    system("pause");
+    Info();
 }
