@@ -1,5 +1,6 @@
 ﻿#include <iostream>
 #include <string>
+#include <vector>
 
 class Person
 {
@@ -32,6 +33,8 @@ public:
 };
 
 void AddContact();
+
+std::vector <Person> Persons;
 
 int lastId = 0;
 
