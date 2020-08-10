@@ -4,57 +4,8 @@
 #include <fstream>
 #include <ShlObj.h>
 #include <direct.h>
+#include "Person.h"
 #pragma warning(disable : 4996)
-
-class Person
-{
-private:
-    int id = 0;
-    std::string number;
-    std::string name;
-    std::string lastname;
-
-public:
-    void setName(std::string _name)
-    {
-        name = _name;
-    }
-
-    void setLastName(std::string _lastname)
-    {
-        lastname = _lastname;
-    }
-
-    void setNumber(std::string _number)
-    {
-        number = _number;
-    }
-
-    void setId(int _id)
-    {
-        id = _id;
-    }
-
-    std::string getName()
-    {
-        return name;
-    }
-
-    std::string getLastName()
-    {
-        return lastname;
-    }
-
-    std::string getNumber()
-    {
-        return number;
-    }
-
-    int getId()
-    {
-        return id;
-    }
-};
 
 class Group
 {
@@ -115,7 +66,7 @@ void LoadGroup(std::string path);
 void Load(std::string path);
 void CreateFolder(std::string path);
 
-std::vector <Person> Persons;
+std::vector <PhoneBook::Person> Persons;
 std::vector <Group> Groups;
 
 int lastId = 0;
@@ -201,7 +152,7 @@ void AddContact()
 {
     system("cls");
 
-    Person newPerson;
+    PhoneBook::Person newPerson;
 
     std::string buffer;
 
@@ -649,7 +600,7 @@ void Load(std::string path)
     std::ifstream loader(path);
     if (loader.good())
     {
-        Person newPerson;
+        PhoneBook::Person newPerson;
         std::string buffer;
 
         while (true)
