@@ -30,6 +30,26 @@ public:
     {
         id = _id;
     }
+
+    std::string getName()
+    {
+        return name;
+    }
+
+    std::string getLastName()
+    {
+        return lastname;
+    }
+
+    std::string getNumber()
+    {
+        return number;
+    }
+
+    int getId()
+    {
+        return id;
+    }
 };
 
 void AddContact();
