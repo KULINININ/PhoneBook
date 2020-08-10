@@ -153,7 +153,7 @@ int main()
         }
         else if (input == "6")
         {
-            //AddGroup();
+            AddGroup();
         }
         else if (input == "7")
         {
@@ -318,4 +318,54 @@ std::string GetPathToDocuments()
     std::wstring wpath = pBuffer;
     std::string path(wpath.begin(), wpath.end());
     return path;
+}
+
+void AddGroup()
+{
+    system("cls");
+    Group newGroup;
+    std::string buffer;
+
+    std::cout << "\n Input name of group: ";
+    std::cin >> buffer;
+
+    newGroup.setNameOfGroup(buffer);
+
+    std::cout << "\n Add person in group now(1) or later(2): ";
+    std::cin >> buffer;
+
+    if (buffer == "1")
+    {
+        std::cout << "\n\n List if persons:\n\n";
+
+        for (size_t i = 0; i < Persons.size(); i++)
+        {
+            std::cout << " " << i + 1 << ". ";
+            buffer = Persons[i].getName();
+            std::cout << buffer;
+            buffer = Persons[i].getLastName();
+            std::cout << " " << buffer;
+            buffer = Persons[i].getNumber();
+            std::cout << ": " << buffer << std::endl;
+            std::cout << std::endl;
+        }
+
+        while (true)
+        {
+            std::cout << "\nInput person number (0-exit): ";
+            std::cin >> buffer;
+
+            if (buffer != "0")
+            {
+                newGroup.setPersonInGroup(std::stoi(buffer) - 1);
+                std::cout << "Added" << std::endl;
+            }
+            else
+            {
+                break;
+            }
+        }
+
+        Groups.push_back(newGroup);
+    }
 }
