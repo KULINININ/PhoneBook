@@ -1,6 +1,7 @@
 ﻿#include <iostream>
 #include <string>
 #include <vector>
+#include <fstream>
 #include <ShlObj.h>
 #include <direct.h>
 
@@ -107,6 +108,8 @@ void AddGroup();
 void ListOfGroup();
 void DeleteGroup();
 void EditGroup();
+void Save(std::string path);
+void SaveGroup(std::string path);
 
 std::vector <Person> Persons;
 std::vector <Group> Groups;
@@ -169,11 +172,19 @@ int main()
         }
         else if (input == "9")
         {
-            //Save
+            Save(path);
+            SaveGroup(path);
+            std::cout << "Saved" << std::endl;
+            system("pause");
+            system("cls");
+            Info();
         }
         else if (input == "10")
         {
-            //Save and exit
+            Save(path);
+            SaveGroup(path);
+
+            break;
         }
     }
 }
@@ -579,4 +590,47 @@ void EditGroup()
     std::cout << std::endl;
     system("pause");
     Info();
+}
+
+void Save(std::string path)
+{
+    path += "\\PhoneBook\\data.txt";
+    std::ofstream saveData(path);
+    for (size_t i = 0; i < Persons.size(); i++)
+    {
+        saveData << "name: " << Persons[i].getName() << std::endl;
+        saveData << "lastname: " << Persons[i].getLastName() << std::endl;
+        saveData << "number: " << Persons[i].getNumber() << std::endl;
+        saveData << "id: " << Persons[i].getId() << std::endl;
+        saveData << "---" << std::endl;
+    }
+
+    saveData << "end" << std::endl;
+    saveData.close();
+}
+
+void SaveGroup(std::string path)
+{
+    path += "\\PhoneBook\\groups.txt";
+
+    std::ofstream saveGroups(path);
+
+    saveGroups << "lastId: " << lastId << std::endl;
+    saveGroups << "---" << std::endl;
+
+    for (size_t i = 0; i < Groups.size(); i++)
+    {
+        int size = Groups[i].getPersonsInGroupSize();
+        std::string nameOfGroup = Groups[i].getNameOfGroup();
+        saveGroups << "NameOfGroup: " << nameOfGroup << std::endl;
+
+        for (size_t j = 0; j < size; j++)
+        {
+            saveGroups << "id: " << Groups[i].getPersonIngroup(j) << std::endl;
+        }
+        saveGroups << "---" << std::endl;
+    }
+
+    saveGroups << "end" << std::endl;
+    saveGroups.close();
 }
