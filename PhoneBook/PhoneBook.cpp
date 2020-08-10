@@ -31,6 +31,10 @@ public:
     }
 };
 
+void AddContact();
+
+int lastId = 0;
+
 int main()
 {
     setlocale(LC_ALL, "rus");
@@ -46,7 +50,10 @@ int main()
         }
         else if (input == "2")
         {
-            //AddContact();
+            AddContact();
+            std::cout << std::endl;
+            system("pause");
+            //Info();
         }
         else if (input == "3")
         {
@@ -81,4 +88,30 @@ int main()
             //Save and exit
         }
     }
+}
+
+void AddContact()
+{
+    system("cls");
+
+    Person newPerson;
+
+    std::string buffer;
+
+    lastId++;
+    int id = lastId;
+
+    std::cout << "\nname: ";
+    std::cin >> buffer;
+    newPerson.setName(buffer);
+
+    std::cout << "\nlastname: ";
+    std::cin >> buffer;
+    newPerson.setLastName(buffer);
+
+    std::cout << "\nnumber: ";
+    std::cin >> buffer;
+    newPerson.setNumber(buffer);
+
+    newPerson.setId(id);
 }
