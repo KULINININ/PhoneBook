@@ -4,6 +4,7 @@
 #include <fstream>
 #include <ShlObj.h>
 #include <direct.h>
+#pragma warning(disable : 4996)
 
 class Person
 {
@@ -112,6 +113,7 @@ void Save(std::string path);
 void SaveGroup(std::string path);
 void LoadGroup(std::string path);
 void Load(std::string path);
+void CreateFolder(std::string path);
 
 std::vector <Person> Persons;
 std::vector <Group> Groups;
@@ -125,6 +127,10 @@ int main()
     Info();
 
     std::string path = GetPathToDocuments();
+
+    CreateFolder(path);
+    Load(path);
+    LoadGroup(path);
 
     while (true)
     {
@@ -726,4 +732,12 @@ void LoadGroup(std::string path)
             }
         }
     }
+}
+
+void CreateFolder(std::string path)
+{
+    path += "\\PhoneBook";
+    char str[100];
+    strcpy(str, path.c_str());
+    mkdir(str);
 }
