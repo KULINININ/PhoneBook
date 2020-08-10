@@ -110,6 +110,8 @@ void DeleteGroup();
 void EditGroup();
 void Save(std::string path);
 void SaveGroup(std::string path);
+void LoadGroup(std::string path);
+void Load(std::string path);
 
 std::vector <Person> Persons;
 std::vector <Group> Groups;
@@ -633,4 +635,95 @@ void SaveGroup(std::string path)
 
     saveGroups << "end" << std::endl;
     saveGroups.close();
+}
+
+void Load(std::string path)
+{
+    path += "\\PhoneBook\\data.txt";
+    std::ifstream loader(path);
+    if (loader.good())
+    {
+        Person newPerson;
+        std::string buffer;
+
+        while (true)
+        {
+            loader >> buffer;
+
+            if (buffer == "name:")
+            {
+                loader >> buffer;
+                newPerson.setName(buffer);
+            }
+            else if (buffer == "lastname:")
+            {
+                loader >> buffer;
+                newPerson.setLastName(buffer);
+            }
+            else if (buffer == "number:")
+            {
+                loader >> buffer;
+                newPerson.setNumber(buffer);
+            }
+            else if (buffer == "id:")
+            {
+                loader >> buffer;
+                newPerson.setId(std::stoi(buffer));
+            }
+            else if (buffer == "---")
+            {
+                Persons.push_back(newPerson);
+            }
+            else if (buffer == "end")
+            {
+                break;
+            }
+        }
+
+        loader.close();
+    }
+}
+
+void LoadGroup(std::string path)
+{
+    path += "\\PhoneBook\\groups.txt";
+
+    Group newGroup;
+
+    std::string buffer;
+    std::ifstream loader(path);
+
+    if (loader.good())
+    {
+        while (true)
+        {
+            loader >> buffer;
+
+            if (buffer == "lastId:")
+            {
+                loader >> buffer;
+                lastId = std::stoi(buffer);
+                loader >> buffer;
+            }
+            else if (buffer == "NameOfGroup:")
+            {
+                loader >> buffer;
+                newGroup.setNameOfGroup(buffer);
+            }
+            else if (buffer == "id:")
+            {
+                loader >> buffer;
+                newGroup.setPersonInGroup(std::stoi(buffer));
+            }
+            else if (buffer == "---")
+            {
+                Groups.push_back(newGroup);
+                newGroup.clearPersonInGroup();
+            }
+            else if (buffer == "end")
+            {
+                break;
+            }
+        }
+    }
 }
