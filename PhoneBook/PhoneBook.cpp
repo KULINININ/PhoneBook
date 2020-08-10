@@ -55,7 +55,8 @@ public:
 void AddContact();
 void Info();
 void List();
-void DeleteContact()
+void DeleteContact();
+void EditContact();
 
 std::vector <Person> Persons;
 
@@ -89,7 +90,7 @@ int main()
         }
         else if (input == "4")
         {
-            //EditContact();
+            EditContact();
         }
         else if (input == "5")
         {
@@ -189,4 +190,68 @@ void DeleteContact()
     number--;
 
     Persons.erase(Persons.begin() + number);
+}
+
+void EditContact()
+{
+    int id;
+    std::string name, lastname, number;
+    List();
+
+    std::cout << "\n Choose contact number: ";
+    std::cin >> id;
+    system("cls");
+    id--;
+
+    name = Persons[id].getName();
+    lastname = Persons[id].getLastName();
+    number = Persons[id].getNumber();
+
+    std::cout << "\n You chose " << name << " " << lastname << ": " << number << std::endl;
+    std::cout << "\n\n What you want to edit?" << "\n\n 1. Name\n 2. Lastname\n 3. Number\n\n Input number: ";
+    std::cin >> number;
+
+    if (number == "1")
+    {
+        system("cls");
+
+        std::cout << "\n Previous name: " << name << "\n\n Input new name: ";
+        std::cin >> lastname;
+        Persons[id].setName(lastname);
+
+        std::cout << "\n Successfully, previous name - " << name << ", new name - " << lastname << "\n" << std::endl;
+
+        system("pause");
+        Info();
+    }
+
+    else if (number == "2")
+    {
+        system("cls");
+
+        std::cout << "\n Previous lastname: " << lastname << "\n\n Input new lastname: ";
+        std::cin >> name;
+        Persons[id].setLastName(name);
+
+        std::cout << "\n Successfully, previous lastname - " << lastname << ", new lastname - " << name << "\n" << std::endl;
+
+        system("pause");
+        Info();
+    }
+
+    else if (number == "3")
+    {
+        system("cls");
+
+        number = Persons[id].getNumber();
+
+        std::cout << "\n Previous number: " << number << "\n\n Input new number: ";
+        std::cin >> name;
+        Persons[id].setNumber(name);
+
+        std::cout << "\n Successfully, previous number - " << number << ", new number - " << name << "\n" << std::endl;
+
+        system("pause");
+        Info();
+    }
 }
