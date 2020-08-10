@@ -33,6 +33,8 @@ public:
 };
 
 void AddContact();
+void Info();
+
 
 std::vector <Person> Persons;
 
@@ -41,6 +43,8 @@ int lastId = 0;
 int main()
 {
     setlocale(LC_ALL, "rus");
+
+    Info();
 
     while (true)
     {
@@ -117,4 +121,11 @@ void AddContact()
     newPerson.setNumber(buffer);
 
     newPerson.setId(id);
+}
+
+void Info()
+{
+    system("cls");
+
+    std::cout << "\n 1. List of contact\n\n 2. Add contact \n\n 3. Delete contact\n\n 4. Edit contact\n\n 5. List of group\n\n 6. Add group\n\n 7. Delete group\n\n 8. Edit group\n\n 9. Save\n\n 10. Exit and save\n\n\n Input: ";
 }
