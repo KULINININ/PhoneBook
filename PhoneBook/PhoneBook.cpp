@@ -105,6 +105,7 @@ void EditContact();
 std::string GetPathToDocuments();
 void AddGroup();
 void ListOfGroup();
+void DeleteGroup();
 
 std::vector <Person> Persons;
 std::vector <Group> Groups;
@@ -159,7 +160,7 @@ int main()
         }
         else if (input == "7")
         {
-            //DeleteGroup();
+            DeleteGroup();
         }
         else if (input == "8")
         {
@@ -412,4 +413,28 @@ void ListOfGroup()
             }
         }
     }
+
+    std::cout << std::endl;
+
+    system("pause");
+}
+
+void DeleteGroup()
+{
+    system("cls");
+    std::cout << std::endl;
+    std::string buffer;
+
+    for (size_t i = 0; i < Groups.size(); i++)
+    {
+        std::cout << " " << i + 1 << ". " << Groups[i].getNameOfGroup() << std::endl;
+    }
+
+    std::cout << "\n Which group to delete: ";
+    std::cin >> buffer;
+
+    Groups.erase(Groups.begin() + std::stoi(buffer) - 1);
+
+    std::cout << std::endl;
+    system("pause");
 }
