@@ -55,6 +55,7 @@ public:
 void AddContact();
 void Info();
 void List();
+void DeleteContact()
 
 std::vector <Person> Persons;
 
@@ -84,7 +85,7 @@ int main()
         }
         else if (input == "3")
         {
-            //DeleteContact();
+            DeleteContact();
         }
         else if (input == "4")
         {
@@ -176,4 +177,16 @@ void List()
             std::cout << std::endl;
         }
     }
+}
+
+void DeleteContact()
+{
+    List();
+    int number;
+
+    std::cout << "\n Contact number to delete: ";
+    std::cin >> number;
+    number--;
+
+    Persons.erase(Persons.begin() + number);
 }
