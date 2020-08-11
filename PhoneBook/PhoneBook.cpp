@@ -387,7 +387,7 @@ void AddGroup()
     system("cls");
     PhoneBook::Group newGroup;
     std::string buffer;
-
+    
     std::cout << "\n Input name of group: ";
     std::cin >> buffer;
 
@@ -437,7 +437,7 @@ void ListOfGroup()
     system("cls");
     std::cout << std::endl;
     int input, id, _id;
-    std::string name, lastname, number;
+    std::string buffer;
 
     for (size_t i = 0; i < Groups.size(); i++)
     {
@@ -463,11 +463,14 @@ void ListOfGroup()
 
                 if (id == _id)
                 {
-                    name = Persons[j].getName();
-                    lastname = Persons[j].getLastName();
-                    number = Persons[j].getNumber();
-
-                    std::cout << " " << i + 1 << ". " << name << " " << lastname << ": " << number << std::endl;
+                    std::cout << " " << i + 1 << ". ";
+                    buffer = Persons[j].getName();
+                    std::cout << buffer;
+                    buffer = Persons[j].getLastName();
+                    std::cout << " " << buffer;
+                    buffer = Persons[j].getNumber();
+                    std::cout << ": " << buffer << std::endl;
+                    std::cout << std::endl;
                 }
             }
         }
@@ -503,7 +506,7 @@ void EditGroup()
     system("cls");
 
     std::cout << std::endl;
-    std::string buffer, name, lastname, number;
+    std::string buffer;
     int groupId, id, _id;
 
     for (size_t i = 0; i < Groups.size(); i++)
